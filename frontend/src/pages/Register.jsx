@@ -13,11 +13,12 @@ function Register()
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if(localStorage.getItem('user')){
-      navigate('/');
+    if (localStorage.getItem("user")) {
+      navigate("/register"); 
     }
   }, [navigate]);
-
+  
+  const [show, showPassword] = useState(true)
   const [values, setValues] = useState({
     name : "",
     email : "",
@@ -25,7 +26,6 @@ function Register()
     phone: "",
     dob: "",
     gender: "",
-    showPassword: false,
     termsAccepted: false,
   });
 
@@ -50,7 +50,6 @@ function Register()
       const {name, email, password,phone,
         dob,
         gender,
-        showPassword,
         termsAccepted} = values;
 
       setLoading(false);
@@ -62,7 +61,6 @@ function Register()
         phone,
         dob,
         gender,
-        showPassword,
         termsAccepted
       });
 
@@ -80,7 +78,7 @@ function Register()
     };
 
     const togglePasswordVisibility = () => {
-      setValues({ ...values, showPassword: !values.showPassword });
+      setValues({ ...show, showPassword: !showPassword });
     };
 
     return (
@@ -90,11 +88,11 @@ function Register()
           <Form style={{width:'30vw',margin:'auto'}}>
             <Form.Group controlId="formBasicName" className="mt-3" >
               <Form.Label className="text-white">Name</Form.Label>
-              <Form.Control type="text"  name="name" placeholder="Full name" value={values.name} onChange={handleChange} required />
+              <Form.Control type="text"  name="name" placeholder="Full name" value={values.name} onChange={handleChange} />
             </Form.Group>
             <Form.Group controlId="formBasicEmail" className="mt-3">
               <Form.Label className="text-white">Email address</Form.Label>
-              <Form.Control type="email"  name="email" placeholder="Enter email" value={values.email} onChange={handleChange} required/>
+              <Form.Control type="email"  name="email" placeholder="Enter email" value={values.email} onChange={handleChange}/>
             </Form.Group>
 
             {/* Phone Nuvalues*/}
@@ -160,7 +158,7 @@ function Register()
                   placeholder="Enter password"
                 />
                 <Button variant="outline-secondary" onClick={togglePasswordVisibility}>
-                  {values.showPassword ? "Hide" : "Show"}
+                  {showPassword ? "Hide" : "Show"}
                 </Button>
               </InputGroup>
               {errors.password && <p className="text-danger">{errors.password}</p>}
@@ -192,6 +190,7 @@ function Register()
               <p className="mt-3" style={{color: "#9d9494"}}>Already have an account? <Link to="/" className="text-white lnk" >Login</Link></p>
             </div>
           </Form>
+          <ToastContainer />
         </>
     )
 }

@@ -6,8 +6,12 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import "./home.css";
 import { deleteTransactions, editTransactions } from "../utils/ApiRequest";
 import axios from "axios";
+import InfoButton from "../components/InfoButton";
+
 
 const TableData = (props) => {
+
+
     const [show, setShow] = useState(false);
     const [transactions, setTransactions] = useState([]);
     // const [loading, setLoading] = useState(false);
@@ -91,7 +95,7 @@ const TableData = (props) => {
     return (
         <>
         <Container>
-        <Table responsive="md" className="data-table mt-5">
+        <Table responsive="md" style={{width:"60vw"}} className="data-table mt-5" striped bordered hover  centered variant="dark">
           <thead>
             <tr>
               <th>Date</th>
@@ -109,7 +113,7 @@ const TableData = (props) => {
               <td>200</td>
               <td>Expenses</td>
               <td>food</td>
-              <td><DeleteForeverIcon/> <EditNoteIcon/></td>
+              <td style={{display:'flex',justifyContent:'space-between'}}><DeleteForeverIcon/> <EditNoteIcon/> <InfoButton transactionId={"67c1c24fa3fc2e22be5d2837"} /> </td>
             </tr>
             {props.data.map((item, index) => (
               <tr key={index}>
@@ -118,7 +122,7 @@ const TableData = (props) => {
                 <td>{item.amount}</td>
                 <td>{item.transactionType}</td>
                 <td>{item.category}</td>
-                <td>
+                <td style={{display:'flex',justifyContent:'space-between'}}>
                   <div className="icons-handle">
                     <EditNoteIcon
                       sx={{ cursor: "pointer" }}
@@ -133,6 +137,8 @@ const TableData = (props) => {
                       id={item._id}
                       onClick={() => handleDeleteClick(item._id)}
                     />
+
+                    <InfoButton transactionId={item._id} />
 
                     {editingTransaction ? (
                       <>

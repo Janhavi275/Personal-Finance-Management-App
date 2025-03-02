@@ -8,9 +8,9 @@ import { useState,useEffect } from 'react';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios'
-import { addTransaction } from '../utils/ApiRequest';
+import { addTransaction, getTransactions } from '../utils/ApiRequest';
 import TableData from './TableData';
-import Analytics from './Atest';
+import Analytics from './Analytics';
 
 function Home()
 {
@@ -35,7 +35,6 @@ function Home()
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [view, setView] = useState("table");
-
 
   const handleStartChange = (date) => {
     setStartDate(date);
