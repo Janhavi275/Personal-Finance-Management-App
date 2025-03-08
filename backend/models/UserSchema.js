@@ -15,11 +15,6 @@ const userSchema = new mongoose.Schema({
         unique : true,
         validate : validator.isEmail,
     },
-    password: {
-        type: String,
-        required: [true, "Password is required"],
-        minlength : [6, "Password Must Be Atleast 6 characters"],
-    },
     phone: { 
         type: String,
         required: [true, "Phone No. is required"]
@@ -31,6 +26,11 @@ const userSchema = new mongoose.Schema({
     gender: {
         type: String,
         required: [true, "Gender is required"]
+    },
+    password: {
+        type: String,
+        required: [true, "Password is required"],
+        minlength : [6, "Password Must Be Atleast 6 characters"]
     },
     termsAccepted:  { 
         type: Boolean,

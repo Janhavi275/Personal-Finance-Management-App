@@ -95,7 +95,7 @@ const TableData = (props) => {
     return (
         <>
         <Container>
-        <Table responsive="md" style={{width:"60vw"}} className="data-table mt-5" striped bordered hover  centered variant="dark">
+        <Table responsive="md" style={{width:"60vw"}} className="data-table mt-5" striped bordered hover  variant="dark">
           <thead>
             <tr>
               <th>Date</th>
@@ -107,14 +107,6 @@ const TableData = (props) => {
             </tr>
           </thead>
           <tbody className="text-white">
-            <tr>
-              <td>22/02/2025</td>
-              <td>Food</td>
-              <td>200</td>
-              <td>Expenses</td>
-              <td>food</td>
-              <td style={{display:'flex',justifyContent:'space-between'}}><DeleteForeverIcon/> <EditNoteIcon/> <InfoButton transactionId={"67c1c24fa3fc2e22be5d2837"} /> </td>
-            </tr>
             {props.data.map((item, index) => (
               <tr key={index}>
                 <td>{moment(item.date).format("YYYY-MM-DD")}</td>
@@ -122,8 +114,9 @@ const TableData = (props) => {
                 <td>{item.amount}</td>
                 <td>{item.transactionType}</td>
                 <td>{item.category}</td>
-                <td style={{display:'flex',justifyContent:'space-between'}}>
-                  <div className="icons-handle">
+                <td>
+                  <div className="icons-handle" style={{display:'flex',justifyContent:'space-between'}}>
+                    <InfoButton transactionId={item._id} />
                     <EditNoteIcon
                       sx={{ cursor: "pointer" }}
                       key={item._id}
@@ -138,12 +131,11 @@ const TableData = (props) => {
                       onClick={() => handleDeleteClick(item._id)}
                     />
 
-                    <InfoButton transactionId={item._id} />
 
                     {editingTransaction ? (
                       <>
                         <div>
-                          <Modal show={show} onHide={handleClose} centered>
+                          <Modal show={show} onHide={handleClose}>
                             <Modal.Header closeButton>
                               <Modal.Title>
                                 Update Transaction Details
@@ -232,8 +224,8 @@ const TableData = (props) => {
                                     onChange={handleChange}
                                   >
                                     <option value={editingTransaction[0].transactionType}>{editingTransaction[0].transactionType}</option>
-                                    <option value="Credit">Credit</option>
-                                    <option value="Expense">Expense</option>
+                                    <option value="income">Credit</option>
+                                    <option value="expense">Expense</option>
                                   </Form.Select>
                                 </Form.Group>
 

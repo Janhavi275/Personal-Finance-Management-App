@@ -11,21 +11,25 @@ function Register()
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   useEffect(() => {
-    if (localStorage.getItem("user")) {
-      navigate("/register"); 
+    if(localStorage.getItem('user')){
+      navigate('/register');
     }
   }, [navigate]);
   
-  const [show, showPassword] = useState(true)
   const [values, setValues] = useState({
     name : "",
     email : "",
-    password : "",
     phone: "",
     dob: "",
     gender: "",
+    password : "",
     termsAccepted: false,
   });
 
@@ -39,17 +43,19 @@ function Register()
     progress: undefined,
     theme: "dark",
   }
-
+  
   const handleChange = (e) => {
-    setValues({...values , [e.target.name]: e.target.value});
-  }
+    setValues({ ...values, [e.target.name]: e.target.value });
+    console.log("Updated Values:", values);
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-      const {name, email, password,phone,
+      const {name, email, phone,
         dob,
-        gender,
+        gender, password,
         termsAccepted} = values;
 
       setLoading(false);
@@ -57,10 +63,10 @@ function Register()
       const {data} = await axios.post(registerAPI, {
         name,
         email,
-        password,
         phone,
         dob,
         gender,
+        password,
         termsAccepted
       });
 
@@ -77,16 +83,12 @@ function Register()
       }
     };
 
-    const togglePasswordVisibility = () => {
-      setValues({ ...show, showPassword: !showPassword });
-    };
-
     return (
         <>
-        <h1 className="text-white text-center">Welcome to Finance Management App</h1>
-        <h2 className="text-white text-center mt-5" >Registration</h2>
-          <Form style={{width:'30vw',margin:'auto'}}>
-            <Form.Group controlId="formBasicName" className="mt-3" >
+            <h1 className="text-white text-center">Welcome to Finance Management App</h1>
+          <Form style={{width:'40vw',margin:'auto',padding:'50px',border:'2px solid white',borderRadius:'10px'}}>
+            <h2 className="text-white text-center" >Registration</h2>
+            <Form.Group controlId="formBasicName">
               <Form.Label className="text-white">Name</Form.Label>
               <Form.Control type="text"  name="name" placeholder="Full name" value={values.name} onChange={handleChange} />
             </Form.Group>
@@ -151,7 +153,7 @@ function Register()
               <Form.Label className="text-white">Password</Form.Label>
               <InputGroup>
                 <Form.Control
-                  type={values.showPassword ? "text" : "password"}
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   value={values.password}
                   onChange={handleChange}
@@ -166,13 +168,8 @@ function Register()
 
             {/* Terms and Conditions */}
             <Form.Group className="mb-3 text-white">
-              <Form.Check
-                type="checkbox"
-                label="I accept the Terms and Conditions"
-                name="termsAccepted"
-                checked={values.termsAccepted}
-                onChange={handleChange}
-              />
+            <Form.Check type="checkbox" label="I accept the Terms and Conditions" name="termsAccepted" checked={values.termsAccepted} onChange={(e) => setValues({ ...values, termsAccepted: e.target.checked })} />
+
               {errors.termsAccepted && <p className="text-danger">{errors.termsAccepted}</p>}
             </Form.Group>
 
@@ -187,7 +184,7 @@ function Register()
                 > {loading ? "Registering..." : "Register"}
                 </Button>
 
-              <p className="mt-3" style={{color: "#9d9494"}}>Already have an account? <Link to="/" className="text-white lnk" >Login</Link></p>
+              <p className="mt-3" style={{color: "#9d9494"}}>Already have an account? <Link to="/login" className="text-white lnk" >Login</Link></p>
             </div>
           </Form>
           <ToastContainer />

@@ -18,7 +18,7 @@ function Login()
 
   useEffect(() => {
     if (localStorage.getItem("user")) {
-      navigate("/");
+      navigate("/login");
     }
   }, [navigate]);
 
@@ -66,7 +66,8 @@ function Login()
   };
     return (
         <>
-            <Form style={{color: '#fff',margin: 'auto', height:'100vh', width:'50vh'}} >
+          <div>
+            <Form style={{color: '#fff',margin: 'auto', height:'80vh', width:'70vh',padding:'20px', border:'2px solid white', borderRadius:'10px'}} >
                 <h1>Login</h1><br></br>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
@@ -92,6 +93,7 @@ function Login()
                 </p>
                 </div>
     </Form>
+    </div>
     <ToastContainer />
         </>
     )

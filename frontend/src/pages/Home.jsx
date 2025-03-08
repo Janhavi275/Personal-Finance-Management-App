@@ -11,9 +11,12 @@ import axios from 'axios'
 import { addTransaction, getTransactions } from '../utils/ApiRequest';
 import TableData from './TableData';
 import Analytics from './Analytics';
+import { useNavigate } from 'react-router-dom';
+import Spinner from '../components/Spinner';
 
 function Home()
 {
+  const navigate = useNavigate()
   const toastOptions = {
     position: "bottom-right",
     autoClose: 2000,
@@ -35,6 +38,7 @@ function Home()
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [view, setView] = useState("table");
+  const [name, setName] = useState("")
 
   const handleStartChange = (date) => {
     setStartDate(date);
@@ -43,6 +47,23 @@ function Home()
   const handleEndChange = (date) => {
     setEndDate(date);
   };
+
+  useEffect(() => {
+    const avatarFunc = async () => {
+      if (localStorage.getItem("user")) {
+        const user = JSON.parse(localStorage.getItem("user"));
+        console.log(user);
+        setcUser(user);
+        setRefresh(true);
+      } else {
+        navigate("/");
+      }
+    };
+
+    avatarFunc();
+  }, [navigate]);
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -122,6 +143,7 @@ function Home()
       try {
         setLoading(true);
         console.log(cUser._id, frequency, startDate, endDate, type);
+        setName(cUser.name)
         const { data } = await axios.post(getTransactions, {
           userId: cUser._id,
           frequency: frequency,
@@ -148,11 +170,20 @@ function Home()
   };
     return (
         <>
+          <div id='App'>
             <Header/>
+            {loading ? (
+            <>
+              <Spinner />
+            </>
+            ) : ( 
             <Container
             style={{ position: "relative", zIndex: "2 !important", backgroundColor:'black'  }}
             className="mt-3"
           >
+            <div style={{color:'#999', textAlign:'left'}}>
+              <h2>{name}</h2>
+            </div>
             <div className="filterRow">
               <div className="text-white">
                 <Form.Group className="mb-3" controlId="formSelectFrequency">
@@ -180,7 +211,7 @@ function Home()
                   >
                     <option value="all">All</option>
                     <option value="expense">Expense</option>
-                    <option value="credit">Income</option>
+                    <option value="income">Income</option>
                   </Form.Select>
                 </Form.Group>
               </div>
@@ -209,7 +240,7 @@ function Home()
                 <Button onClick={handleShow} className="mobileBtn">
                   +
                 </Button>
-                <Modal show={show} onHide={handleClose} centered>
+                <Modal show={show} style={{color:'black'}} onHide={handleClose}>
                   <Modal.Header closeButton>
                     <Modal.Title>Add Transaction Details</Modal.Title>
                   </Modal.Header>
@@ -277,7 +308,7 @@ function Home()
                           onChange={handleChange}
                         >
                           <option value="">Choose...</option>
-                          <option value="credit">Credit</option>
+                          <option value="income">Credit</option>
                           <option value="expense">Expense</option>
                         </Form.Select>
                       </Form.Group>
@@ -362,6 +393,9 @@ function Home()
             )}
             <ToastContainer />
           </Container>
+          )
+        }
+        </div>
         </>
     )
 }
